@@ -1,8 +1,8 @@
 const CACHE_NAME = 'quiniela-cache-v1';
 const urlsToCache = [
-  '/quiniela/',  // ← Si tu carpeta está en http://tudominio.com/quiniela/
-  'index.html',
-  'aaaa-removebg-preview.png'
+  '/quiniela/index.html',
+  '/quiniela/aaaa-removebg-preview.png',
+  '/quiniela/manifest.json'
 ];
 
 self.addEventListener('install', event => {
