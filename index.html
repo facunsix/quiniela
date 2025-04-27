@@ -379,6 +379,29 @@
     }
   </script>
   <script>
+// En tu index.html, dentro del <script>:
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-button').style.display = 'block';
+});
+
+document.getElementById('install-button').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('Usuario aceptó instalar');
+    }
+    deferredPrompt = null;
+  }
+});
+
+
+
+    
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(function(registration) {
