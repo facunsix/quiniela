@@ -1,0 +1,22 @@
+{
+    "short_name": "Calculadora de Quiniela",
+    "name": "Calculadora de Quiniela - Apuesta Inteligente",
+    "description": "Una calculadora para calcular tus apuestas de Quiniela.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f5f7ff",
+    "theme_color": "#4361ee",
+    "icons": [
+      {
+        "src": "aaaaa-removebg-preview.png",
+        "sizes": "256x256",
+        "type": "image/png"
+      },
+      {
+        "src": "aaaa-removebg-preview.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

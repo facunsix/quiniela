@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Quiniela</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="aaaa-removebg-preview.png" type="image/x-icon">
+<link rel="apple-touch-icon" href="aaaa-removebg-preview.png">
+<link rel="manifest" href="manifest.json">
+
+
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #f72585;
+      --dark: #212529;
+      --light: #f8f9fa;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --danger: #ef233c;
+      --gray: #adb5bd;
+      --border-radius: 12px;
+      --box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f7ff;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: var(--secondary);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      border-radius: 3px;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--secondary);
+      font-size: 0.95rem;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--gray);
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      transition: var(--transition);
+      background-color: var(--light);
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(0,0,0,0.15);
+      background: linear-gradient(to right, var(--primary-light), var(--primary));
+    }
+
+    .btn-secondary {
+      background: linear-gradient(to right, #6c757d, #5a6268);
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(to right, #5a6268, #6c757d);
+    }
+
+    .btn-accent {
+      background: linear-gradient(to right, var(--accent), #f7479a);
+    }
+
+    .btn-accent:hover {
+      background: linear-gradient(to right, #f7479a, var(--accent));
+    }
+
+    .result-card {
+      background-color: #f8f9fa;
+      border-left: 4px solid var(--primary);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      margin-top: 20px;
+    }
+
+    .result-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-item strong {
+      color: var(--secondary);
+    }
+
+    .result-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px dashed var(--gray);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gray), transparent);
+      margin: 30px 0;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Calculadora de Quiniela</h1>
+
+    <div class="card">
+      <h2>Selección de Juegos</h2>
+      <div class="form-group">
+        <label for="quini6">Quini 6 ($):</label>
+        <input type="number" id="quini6" placeholder="Ingrese importe" min="0" step="0.01">
+      </div>
+      
+      <div class="form-group">
+        <label for="brinco">Brinco ($):</label>
+        <input type="number" id="brinco" placeholder="Ingrese importe" min="0" step="0.01">
+      </div>
+      
+      <div class="form-group">
+        <label for="loto">Loto ($):</label>
+        <input type="number" id="loto" placeholder="Ingrese importe" min="0" step="0.01">
+      </div>
+      
+      <div class="form-group">
+        <label for="telekino">Telekino ($):</label>
+        <input type="number" id="telekino" placeholder="Ingrese importe" min="0" step="0.01">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Datos de Quiniela</h2>
+      <div class="form-group">
+        <label for="quiniela">Importe de Quiniela ($):</label>
+        <input type="number" id="quiniela" placeholder="Ingrese importe" min="0" step="0.01">
+      </div>
+      
+      <div class="form-group">
+        <label for="premios">Importe de Premios ($):</label>
+        <input type="number" id="premios" placeholder="Ingrese importe" min="0" step="0.01">
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcular('maquina1')">Calcular Máquina 1</button>
+    <div class="result-card" id="resultado1"></div>
+
+    <hr class="divider">
+
+    <button class="btn" onclick="calcular('maquina2')">Calcular Máquina 2</button>
+    <div class="result-card" id="resultado2"></div>
+
+    <hr class="divider">
+
+    <button class="btn btn-accent" onclick="totalAgencia()">Calcular Total Agencia</button>
+    <div class="result-card" id="resultadoTotal"></div>
+
+    <hr class="divider">
+
+    <button class="btn btn-secondary" onclick="limpiarTodo()">Limpiar Todo</button>
+  </div>
+
+  <button id="install-button" style="display: none;">Añadir a la pantalla de inicio</button>
+
+
+  <script>
+    let maquinas = {
+      maquina1: null,
+      maquina2: null
+    };
+
+    function calcular(maquina) {
+      const quini6 = parseFloat(document.getElementById('quini6').value) || 0;
+      const brinco = parseFloat(document.getElementById('brinco').value) || 0;
+      const loto = parseFloat(document.getElementById('loto').value) || 0;
+      const telekino = parseFloat(document.getElementById('telekino').value) || 0;
+      const quiniela = parseFloat(document.getElementById('quiniela').value) || 0;
+      const premios = parseFloat(document.getElementById('premios').value) || 0;
+
+      const totalJuegos = quini6 + brinco + loto + telekino;
+
+      const descuento10 = totalJuegos * 0.10;
+      const totalJuegosConDescuento = totalJuegos - descuento10;
+
+      const descuentoQuiniela = quiniela * 0.1242;
+      const totalQuinielaConDescuento = quiniela - descuentoQuiniela;
+
+      const sumaJuegosYQuiniela = totalJuegosConDescuento + totalQuinielaConDescuento;
+      const totalFinal = sumaJuegosYQuiniela - totalJuegos;
+
+      maquinas[maquina] = totalFinal;
+
+      document.getElementById('resultado' + (maquina === 'maquina1' ? '1' : '2')).innerHTML = `
+        <div class="result-item">
+          <span>Total Juegos Ingresados:</span>
+          <strong>$${totalJuegos.toFixed(2)}</strong>
+        </div>
+        <div class="result-item">
+          <span>Descuento 10% Juegos:</span>
+          <strong>$${descuento10.toFixed(2)}</strong>
+        </div>
+        <div class="result-item">
+          <span>Total Juegos luego del 10%:</span>
+          <strong>$${totalJuegosConDescuento.toFixed(2)}</strong>
+        </div>
+        <div class="result-item">
+          <span>Importe Quiniela:</span>
+          <strong>$${quiniela.toFixed(2)}</strong>
+        </div>
+        <div class="result-item">
+          <span>Descuento 12,42% Quiniela:</span>
+          <strong>$${descuentoQuiniela.toFixed(2)}</strong>
+        </div>
+        <div class="result-item">
+          <span>Total Quiniela luego del 12,42%:</span>
+          <strong>$${totalQuinielaConDescuento.toFixed(2)}</strong>
+        </div>
+        <div class="result-item">
+          <span>Suma Juegos + Quiniela:</span>
+          <strong>$${sumaJuegosYQuiniela.toFixed(2)}</strong>
+        </div>
+        <div class="result-total">
+          <span>Total Final de ${maquina.toUpperCase()}:</span>
+          <strong>$${totalFinal.toFixed(2)}</strong>
+        </div>
+      `;
+    }
+
+    function totalAgencia() {
+      if (maquinas.maquina1 == null || maquinas.maquina2 == null) {
+        alert('Primero debes calcular ambas máquinas.');
+        return;
+      }
+
+      const totalAgencia = maquinas.maquina1 + maquinas.maquina2;
+
+      document.getElementById('resultadoTotal').innerHTML = `
+        <div class="result-total" style="justify-content: center; display: flex; gap: 10px;">
+          <span>Total a Pagar en Agencia:</span>
+          <strong style="color: var(--accent);">$${totalAgencia.toFixed(2)}</strong>
+        </div>
+      `;
+    }
+
+    function limpiarTodo() {
+      document.getElementById('quini6').value = '';
+      document.getElementById('brinco').value = '';
+      document.getElementById('loto').value = '';
+      document.getElementById('telekino').value = '';
+      document.getElementById('quiniela').value = '';
+      document.getElementById('premios').value = '';
+
+      document.getElementById('resultado1').innerHTML = '';
+      document.getElementById('resultado2').innerHTML = '';
+      document.getElementById('resultadoTotal').innerHTML = '';
+
+      maquinas.maquina1 = null;
+      maquinas.maquina2 = null;
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(function(registration) {
+          console.log('Service Worker registrado con éxito: ', registration);
+        })
+        .catch(function(error) {
+          console.log('Error al registrar el Service Worker: ', error);
+        });
+    }
+    let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevenir que el navegador muestre su propia caja de instalación
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Mostrar un botón personalizado para que el usuario instale la app
+  const installButton = document.getElementById('install-button');
+  installButton.style.display = 'block';
+
+  installButton.addEventListener('click', () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('Usuario aceptó la instalación');
+      } else {
+        console.log('Usuario rechazó la instalación');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+
+  </script>
+  
+</body>
+</html>
