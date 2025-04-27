@@ -1,21 +1,13 @@
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-      caches.open('v1').then((cache) => {
-        return cache.addAll([
-          '/',
-          '/index.html',
-          'aaaa-removebg-preview.png',
-          'aaaa-removebg-preview.png'
-        ]);
-      })
-    );
-  });
-  
-  self.addEventListener('fetch', (event) => {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
-      })
-    );
-  });
-  
+const CACHE_NAME = 'quiniela-cache-v1';
+const urlsToCache = [
+  '/quiniela/',  // ← Si tu carpeta está en http://tudominio.com/quiniela/
+  'index.html',
+  'aaaa-removebg-preview.png'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+  );
+});
