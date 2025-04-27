@@ -2,7 +2,8 @@
     "short_name": "Calculadora de Quiniela",
     "name": "Calculadora de Quiniela - Apuesta Inteligente",
     "description": "Una calculadora para calcular tus apuestas de Quiniela.",
-    "start_url": "/",
+    "start_url": "/quiniela/",  // Si está en https://facunsix.github.io/quiniela/
+    "scope": "/quiniela/",
     "display": "standalone",
     "background_color": "#f5f7ff",
     "theme_color": "#4361ee",
