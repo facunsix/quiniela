@@ -8,11 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="aaaa-removebg-preview.png" type="image/x-icon">
-<link rel="apple-touch-icon" href="aaaa-removebg-preview.png">
-<!-- Cambia el link del manifest -->
-<!-- Debe quedar así (sin rutas adicionales) -->
-<link rel="manifest" href="manifest.json">
-
+  <link rel="apple-touch-icon" href="aaaa-removebg-preview.png">
+  <link rel="manifest" href="manifest.json">
 
   <style>
     :root {
@@ -112,7 +109,7 @@
       font-size: 0.95rem;
     }
 
-    input[type="number"] {
+    input[type="text"] {
       width: 100%;
       padding: 12px 15px;
       border: 1px solid var(--gray);
@@ -122,7 +119,7 @@
       background-color: var(--light);
     }
 
-    input[type="number"]:focus {
+    input[type="text"]:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
@@ -230,36 +227,32 @@
       <h2>Selección de Juegos</h2>
       <div class="form-group">
         <label for="quini6">Quini 6 ($):</label>
-        <input type="number" id="quini6" placeholder="Ingrese importe" min="0" step="0.01">
+        <input type="text" id="quini6" placeholder="Ingrese importe" inputmode="numeric">
+      </div>
+
+      <div class="form-group">
+        <label for="loto">Loto ($):</label>
+        <input type="text" id="loto" placeholder="Ingrese importe" inputmode="numeric">
       </div>
       
       <div class="form-group">
         <label for="brinco">Brinco ($):</label>
-        <input type="number" id="brinco" placeholder="Ingrese importe" min="0" step="0.01">
-      </div>
-      
-      <div class="form-group">
-        <label for="loto">Loto ($):</label>
-        <input type="number" id="loto" placeholder="Ingrese importe" min="0" step="0.01">
+        <input type="text" id="brinco" placeholder="Ingrese importe" inputmode="numeric">
       </div>
       
       <div class="form-group">
         <label for="telekino">Telekino ($):</label>
-        <input type="number" id="telekino" placeholder="Ingrese importe" min="0" step="0.01">
+        <input type="text" id="telekino" placeholder="Ingrese importe" inputmode="numeric">
       </div>
     </div>
 
     <div class="card">
       <h2>Datos de Quiniela</h2>
       <div class="form-group">
-        <label for="quiniela">Importe de Quiniela ($):</label>
-        <input type="number" id="quiniela" placeholder="Ingrese importe" min="0" step="0.01">
+        <label for="quiniela">Importe de Quiniela Neto ($):</label>
+        <input type="text" id="quiniela" placeholder="Ingrese importe" inputmode="numeric">
       </div>
-      
-      <div class="form-group">
-        <label for="premios">Importe de Premios ($):</label>
-        <input type="number" id="premios" placeholder="Ingrese importe" min="0" step="0.01">
-      </div>
+
     </div>
 
     <button class="btn" onclick="calcular('maquina1')">Calcular Máquina 1</button>
@@ -272,7 +265,7 @@
 
     <hr class="divider">
 
-    <button class="btn btn-accent" onclick="totalAgencia()">Calcular Total Agencia</button>
+    <button class="btn btn-accent" onclick="totalAgencia()">Calcular Total Agencia (Sin descontar premios)</button>
     <div class="result-card" id="resultadoTotal"></div>
 
     <hr class="divider">
@@ -280,68 +273,68 @@
     <button class="btn btn-secondary" onclick="limpiarTodo()">Limpiar Todo</button>
   </div>
 
-  <button id="install-button">Añadir a la pantalla de inicio</button>
-
-
   <script>
     let maquinas = {
       maquina1: null,
       maquina2: null
     };
 
+    // Función para formatear números con puntos de mil
+    function formatNumberWithDots(number) {
+      // Convertir a string y separar decimales
+      const parts = number.toString().replace(',', '.').split('.');
+      let integerPart = parts[0];
+      const decimalPart = parts.length > 1 ? ',' + parts[1].substring(0, 2) : '';
+      
+      // Agregar puntos cada 3 dígitos
+      integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      
+      return integerPart + decimalPart;
+    }
+
+    function parseNumberWithDots(formattedNumber) {
+      // Reemplazar puntos y comas (para decimales)
+      const numberString = formattedNumber.replace(/\./g, '').replace(',', '.');
+      return parseFloat(numberString) || 0;
+    }
+
     function calcular(maquina) {
-      const quini6 = parseFloat(document.getElementById('quini6').value) || 0;
-      const brinco = parseFloat(document.getElementById('brinco').value) || 0;
-      const loto = parseFloat(document.getElementById('loto').value) || 0;
-      const telekino = parseFloat(document.getElementById('telekino').value) || 0;
-      const quiniela = parseFloat(document.getElementById('quiniela').value) || 0;
-      const premios = parseFloat(document.getElementById('premios').value) || 0;
+      const quini6 = parseNumberWithDots(document.getElementById('quini6').value);
+      const brinco = parseNumberWithDots(document.getElementById('brinco').value);
+      const loto = parseNumberWithDots(document.getElementById('loto').value);
+      const telekino = parseNumberWithDots(document.getElementById('telekino').value);
+      const quiniela = parseNumberWithDots(document.getElementById('quiniela').value);
+    
 
       const totalJuegos = quini6 + brinco + loto + telekino;
-
       const descuento10 = totalJuegos * 0.10;
       const totalJuegosConDescuento = totalJuegos - descuento10;
-
-      const descuentoQuiniela = quiniela * 0.1242;
-      const totalQuinielaConDescuento = quiniela - descuentoQuiniela;
-
-      const sumaJuegosYQuiniela = totalJuegosConDescuento + totalQuinielaConDescuento;
-      const totalFinal = sumaJuegosYQuiniela - totalJuegos;
+      const totalQuinielaConDescuento = quiniela - totalJuegos;
+      const general1242 = totalQuinielaConDescuento - (totalQuinielaConDescuento * 0.1242);
+      const sumaJuegosYQuiniela = totalJuegosConDescuento + general1242;
+      const totalFinal = sumaJuegosYQuiniela;
 
       maquinas[maquina] = totalFinal;
 
       document.getElementById('resultado' + (maquina === 'maquina1' ? '1' : '2')).innerHTML = `
         <div class="result-item">
           <span>Total Juegos Ingresados:</span>
-          <strong>$${totalJuegos.toFixed(2)}</strong>
+          <strong>$${formatNumberWithDots(totalJuegos.toFixed(2))}</strong>
         </div>
-        <div class="result-item">
-          <span>Descuento 10% Juegos:</span>
-          <strong>$${descuento10.toFixed(2)}</strong>
-        </div>
+
         <div class="result-item">
           <span>Total Juegos luego del 10%:</span>
-          <strong>$${totalJuegosConDescuento.toFixed(2)}</strong>
+          <strong>$${formatNumberWithDots(totalJuegosConDescuento.toFixed(2))}</strong>
         </div>
-        <div class="result-item">
-          <span>Importe Quiniela:</span>
-          <strong>$${quiniela.toFixed(2)}</strong>
-        </div>
-        <div class="result-item">
-          <span>Descuento 12,42% Quiniela:</span>
-          <strong>$${descuentoQuiniela.toFixed(2)}</strong>
-        </div>
+
         <div class="result-item">
           <span>Total Quiniela luego del 12,42%:</span>
-          <strong>$${totalQuinielaConDescuento.toFixed(2)}</strong>
+          <strong>$${formatNumberWithDots(general1242.toFixed(2))}</strong>
         </div>
-        <div class="result-item">
-          <span>Suma Juegos + Quiniela:</span>
-          <strong>$${sumaJuegosYQuiniela.toFixed(2)}</strong>
-        </div>
+   
         <div class="result-total">
           <span>Total Final de ${maquina.toUpperCase()}:</span>
-          <strong>$${totalFinal.toFixed(2)}</strong>
+          <strong>$${formatNumberWithDots(totalFinal.toFixed(2))}</strong>
         </div>
       `;
     }
@@ -357,7 +350,7 @@
       document.getElementById('resultadoTotal').innerHTML = `
         <div class="result-total" style="justify-content: center; display: flex; gap: 10px;">
           <span>Total a Pagar en Agencia:</span>
-          <strong style="color: var(--accent);">$${totalAgencia.toFixed(2)}</strong>
+          <strong style="color: var(--accent);">$${formatNumberWithDots(totalAgencia.toFixed(2))}</strong>
         </div>
       `;
     }
@@ -368,7 +361,6 @@
       document.getElementById('loto').value = '';
       document.getElementById('telekino').value = '';
       document.getElementById('quiniela').value = '';
-      document.getElementById('premios').value = '';
 
       document.getElementById('resultado1').innerHTML = '';
       document.getElementById('resultado2').innerHTML = '';
@@ -377,31 +369,46 @@
       maquinas.maquina1 = null;
       maquinas.maquina2 = null;
     }
-  </script>
-  <script>
-// En tu index.html, dentro del <script>:
-let deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('install-button').style.display = 'block';
-});
+    // Configuración del formato de entrada
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input[type="text"][inputmode="numeric"]');
+      
+      inputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+          // Guardar posición del cursor
+          const cursorPosition = this.selectionStart;
+          const originalLength = this.value.length;
+          
+          // Obtener valor sin formato
+          const cleanValue = this.value.replace(/[^0-9,]/g, '');
+          
+          // Formatear con puntos
+          const number = parseNumberWithDots(cleanValue);
+          this.value = formatNumberWithDots(cleanValue.replace('.', ''));
+          
+          // Ajustar posición del cursor
+          const newLength = this.value.length;
+          const lengthDiff = newLength - originalLength;
+          const newCursorPosition = cursorPosition + lengthDiff;
+          
+          this.setSelectionRange(
+            Math.min(newCursorPosition, this.value.length),
+            Math.min(newCursorPosition, this.value.length)
+          );
+        });
+        
+        // También formatear al perder el foco
+        input.addEventListener('blur', function() {
+          if (this.value) {
+            const cleanValue = this.value.replace(/[^0-9,]/g, '');
+            const number = parseNumberWithDots(cleanValue);
+            this.value = formatNumberWithDots(cleanValue.replace('.', ''));
+          }
+        });
+      });
+    });
 
-document.getElementById('install-button').addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      console.log('Usuario aceptó instalar');
-    }
-    deferredPrompt = null;
-  }
-});
-
-
-
-    
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(function(registration) {
@@ -411,31 +418,13 @@ document.getElementById('install-button').addEventListener('click', async () => 
           console.log('Error al registrar el Service Worker: ', error);
         });
     }
+
     let deferredPrompt;
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevenir que el navegador muestre su propia caja de instalación
-  e.preventDefault();
-  deferredPrompt = e;
-
-  // Mostrar un botón personalizado para que el usuario instale la app
-  const installButton = document.getElementById('install-button');
-  installButton.style.display = 'block';
-
-  installButton.addEventListener('click', () => {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('Usuario aceptó la instalación');
-      } else {
-        console.log('Usuario rechazó la instalación');
-      }
-      deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
     });
-  });
-});
-
   </script>
-  
 </body>
 </html>
